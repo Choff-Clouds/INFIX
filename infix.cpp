@@ -9,6 +9,8 @@ int precedence(char op) {
         return 1;
     if (op == '*' || op == '/')
         return 2;
+    if (op == '^')
+        return 3;
     return 0;
 }
 
@@ -22,11 +24,16 @@ int applyOperation(int a, int b, char op) {
             return a * b;
         case '/':
             return a / b;
+        case '^':
+            int result = 1;
+            for (int i = 0; i < b; i++)
+                result *= a;
+            return result;
     }
     return 0;
 }
 
-int evaluateExpression(string expression) {
+int evaluateExpression(const string& expression, int start, int end) {
     stack<char> operators;
     stack<int> operands;
 
@@ -36,13 +43,12 @@ int evaluateExpression(string expression) {
 
         if (isdigit(expression[i])) {
             int operand = 0;
-            while (i < expression.length() && isdigit(expression[i])) {
+            while (i <= end && isdigit(expression[i])) {
                 operand = operand * 10 + (expression[i] - '0');
                 i++;
             }
-            i--;
             operands.push(operand);
-           
+            i--;
         } else if (expression[i] == '(') {
             operators.push('(');
         } else if (expression[i] == ')') {
@@ -88,7 +94,7 @@ int main(int argc, char *argv[]) {
    //ifstream file(argv[1]);
     string line;
     while (getline(cin, line)) {
-        int result = evaluateExpression(line);
+        int result = evaluateExpression(line, 0, line.length() - 1);
         cout << result << endl;
     }
     //file.close();
