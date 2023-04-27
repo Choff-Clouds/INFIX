@@ -34,7 +34,7 @@ int evaluateExpression(string expression) {
     stack<char> operators;
     stack<int> operands;
 
-    for (int i = start; i <= end; i++) {
+    for (int i = 0; i < expression.length(); i++) {
         if (expression[i] == ' ')
             continue;
 
