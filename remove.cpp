@@ -4,9 +4,9 @@
 
 using namespace std;
 
-int main() {
-    ifstream inFile("equations.txt");
-    ofstream outFile("equations_clean.txt");
+int main(int argc, char* argv[i) {
+    ifstream inFile(argv[1]);
+    ofstream outFile(argv[1]);
 
     if (!inFile) {
         cerr << "Unable to open input file";
