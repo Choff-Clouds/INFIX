@@ -9,8 +9,6 @@ int precedence(char op) {
         return 1;
     if (op == '*' || op == '/')
         return 2;
-    if (op == '^')
-        return 3;
     return 0;
 }
 
@@ -24,16 +22,11 @@ int applyOperation(int a, int b, char op) {
             return a * b;
         case '/':
             return a / b;
-        case '^':
-            int result = 1;
-            for (int i = 0; i < b; i++)
-                result *= a;
-            return result;
     }
     return 0;
 }
 
-int evaluateExpression(const string& expression, int start, int end) {
+int evaluateExpression(string expression) {
     stack<char> operators;
     stack<int> operands;
 
@@ -43,12 +36,13 @@ int evaluateExpression(const string& expression, int start, int end) {
 
         if (isdigit(expression[i])) {
             int operand = 0;
-            while (i <= end && isdigit(expression[i])) {
+            while (i < expression.length() && isdigit(expression[i])) {
                 operand = operand * 10 + (expression[i] - '0');
                 i++;
             }
-            operands.push(operand);
             i--;
+            operands.push(operand);
+           
         } else if (expression[i] == '(') {
             operators.push('(');
         } else if (expression[i] == ')') {
