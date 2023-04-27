@@ -27,37 +27,21 @@ int main(int argc, char *argv[i]) {
     string line;
 
     while (getline(inFile, line)) {
-        removeEndline(line);
-        line = line.substr(0, line.size() - 1); // remove the end period
-        line = line.substr(line.find(" ") + 1); // remove the line number
-        outFile << line << endl;
+        size_t spacePos = line.find(' ');
+        if(spacePos != string::npos)
+        {
+         line.erase(0, spacePos + 1);   
+        }
+        while(!line.empty() && line.back() == '.')
+        {
+         line.pop_back();   
+        }
+        cout << line << endl;
     }
 
     inFile.close();
     outFile.close();
 
-    inFile.open("answersFromBot.txt");
-    outFile.open("answersFromBot_clean.txt");
-
-    if (!inFile) {
-        cerr << "Unable to open input file";
-        return 1;
-    }
-
-    if (!outFile) {
-        cerr << "Unable to open output file";
-        return 1;
-    }
-
-    while (getline(inFile, line)) {
-        removeEndline(line);
-        line = line.substr(0, line.size() - 1); // remove the end period
-        line = line.substr(line.find(" ") + 1); // remove the line number
-        outFile << line << endl;
-    }
-
-    inFile.close();
-    outFile.close();
-
+    
     return 0;
 }
