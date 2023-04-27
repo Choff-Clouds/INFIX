@@ -4,12 +4,6 @@
 
 using namespace std;
 
-void removeEndline(string& line) {
-    if (!line.empty() && line[line.length() - 1] == '\r') {
-        line.erase(line.length() - 1);
-    }
-}
-
 int main(int argc, char *argv[]) {
     ifstream inFile(argv[1]);
     ofstream outFile("output.txt");
