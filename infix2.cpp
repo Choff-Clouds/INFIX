@@ -3,6 +3,7 @@
 #include <string>
 #include <stack>
 #include <fstream>
+#include <cmath>
 using namespace std;
 
 int precedence(char op) {
@@ -19,9 +20,7 @@ int applyOperation(int a, int b, char op) {
     if (op == '/')
         return a / b;
     if (op == '^') {
-        int result = 1;
-        for (int i = 0; i < b; i++)
-            result *= a;
+       result = pow(a,b);
         return result;
     }
     return 0;
