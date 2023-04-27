@@ -12,7 +12,7 @@ void removeEndline(string& line) {
 
 int main(int argc, char *argv[i]) {
     ifstream inFile(arg[1]);
-    ofstream outFile(arg[2]);
+    ofstream outFile("output.txt);
 
     if (!inFile) {
         cerr << "Unable to open input file";
