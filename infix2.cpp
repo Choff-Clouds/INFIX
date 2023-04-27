@@ -1,18 +1,12 @@
+
 #include <iostream>
 #include <string>
 #include <stack>
 #include <fstream>
-#include <cmath>
 using namespace std;
 
 int precedence(char op) {
-    if(op == '+' || op == '-')
-    {
-     return 1;   
-    }
-    if(op == '*' || (op == '/') || op == '^')
-        return 1;
-    return 0;
+    return 1;
 }
 
 int applyOperation(int a, int b, char op) {
@@ -25,16 +19,19 @@ int applyOperation(int a, int b, char op) {
     if (op == '/')
         return a / b;
     if (op == '^') {
-        return pow(a,b);
+        int result = 1;
+        for (int i = 0; i < b; i++)
+            result *= a;
+        return result;
     }
     return 0;
 }
 
-int evaluateExpression(string expression) {
+int evaluateExpression(const string& expression, int start, int end) {
     stack<char> operators;
     stack<int> operands;
 
-    for (int i = 0; i < expression.length(); i++) {
+    for (int i = start; i <= end; i++) {
         if (expression[i] == ' ')
             continue;
 
@@ -91,7 +88,7 @@ int main(int argc, char *argv[]) {
    //ifstream file(argv[1]);
     string line;
     while (getline(cin, line)) {
-        int result = evaluateExpression(line);
+        int result = evaluateExpression(line, 0, line.length() - 1);
         cout << result << endl;
     }
     //file.close();
