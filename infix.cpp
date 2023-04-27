@@ -9,8 +9,7 @@ int precedence(char op) {
         return 1;
     if (op == '*' || op == '/')
         return 2;
-    if (op == '^')
-        return 3;
+    
     return 0;
 }
 
@@ -24,11 +23,6 @@ int applyOperation(int a, int b, char op) {
             return a * b;
         case '/':
             return a / b;
-        case '^':
-            int result = 1;
-            for (int i = 0; i < b; i++)
-                result *= a;
-            return result;
     }
     return 0;
 }
