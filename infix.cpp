@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
    //ifstream file(argv[1]);
     string line;
     while (getline(cin, line)) {
-        int result = evaluateExpression(line, 0, line.length() - 1);
+        int result = evaluateExpression(line);
         cout << result << endl;
     }
     //file.close();
