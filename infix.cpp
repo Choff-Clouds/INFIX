@@ -1,130 +1,103 @@
 #include <iostream>
-#include <fstream>
-#include <stack>
 #include <string>
+#include <stack>
+#include <fstream>
 using namespace std;
 
-int evaluate(string expression);
-int precedence(char op);
-int applyOp(int a, int b, char op);
-
-int main()
-{
-    string filename;
-    cout << "Enter the name of the file: ";
-    cin >> filename;
-
-    ifstream inputFile(filename);
-    if (!inputFile.is_open()) {
-        cout << "Failed to open file " << filename << endl;
+int precedence(char op) {
+    if (op == '+' || op == '-')
         return 1;
-    }
-
-    string line;
-    while (getline(inputFile, line)) {
-        cout << "Expression: " << line << endl;
-        cout << "Result: " << evaluate(line) << endl;
-    }
-
-    inputFile.close();
+    if (op == '*' || op == '/')
+        return 2;
+    if (op == '^')
+        return 3;
     return 0;
 }
 
-int evaluate(string expression)
-{
-    stack<int> values;
-    stack<char> ops;
+int applyOperation(int a, int b, char op) {
+    switch (op) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
+        case '/':
+            return a / b;
+        case '^':
+            int result = 1;
+            for (int i = 0; i < b; i++)
+                result *= a;
+            return result;
+    }
+    return 0;
+}
 
-    for (int i = 0; i < (int)expression.length(); i++)
-    {
+int evaluateExpression(const string& expression, int start, int end) {
+    stack<char> operators;
+    stack<int> operands;
+
+    for (int i = start; i <= end; i++) {
         if (expression[i] == ' ')
             continue;
-        else if (expression[i] == '(')
-            ops.push(expression[i]);
-        else if (isdigit(expression[i]))
-        {
-            int val = 0;
-            while (i < (int)expression.length() && isdigit(expression[i]))
-            {
-                val = (val*10) + (expression[i]-'0');
+
+        if (isdigit(expression[i])) {
+            int operand = 0;
+            while (i <= end && isdigit(expression[i])) {
+                operand = operand * 10 + (expression[i] - '0');
                 i++;
             }
-            values.push(val);
+            operands.push(operand);
             i--;
-        }
-        else if (expression[i] == ')')
-        {
-            while (!ops.empty() && ops.top() != '(')
-            {
-                int val2 = values.top();
-                values.pop();
-
-                int val1 = values.top();
-                values.pop();
-
-                char op = ops.top();
-                ops.pop();
-
-                values.push(applyOp(val1, val2, op));
+        } else if (expression[i] == '(') {
+            operators.push('(');
+        } else if (expression[i] == ')') {
+            while (!operators.empty() && operators.top() != '(') {
+                int b = operands.top();
+                operands.pop();
+                int a = operands.top();
+                operands.pop();
+                char op = operators.top();
+                operators.pop();
+                operands.push(applyOperation(a, b, op));
             }
-
-            if (!ops.empty())
-                ops.pop();
-        }
-        else
-        {
-            while (!ops.empty() && precedence(ops.top()) >= precedence(expression[i]))
-            {
-                int val2 = values.top();
-                values.pop();
-
-                int val1 = values.top();
-                values.pop();
-
-                char op = ops.top();
-                ops.pop();
-
-                values.push(applyOp(val1, val2, op));
+            operators.pop();
+        } else {
+            while (!operators.empty() && precedence(operators.top()) >= precedence(expression[i])) {
+                int b = operands.top();
+                operands.pop();
+                int a = operands.top();
+                operands.pop();
+                char op = operators.top();
+                operators.pop();
+                operands.push(applyOperation(a, b, op));
             }
-
-            ops.push(expression[i]);
+            operators.push(expression[i]);
         }
     }
 
-    while (!ops.empty())
-    {
-        int val2 = values.top();
-        values.pop();
-
-        int val1 = values.top();
-        values.pop();
-
-        char op = ops.top();
-        ops.pop();
-
-        values.push(applyOp(val1, val2, op));
+    while (!operators.empty()) {
+        int b = operands.top();
+        operands.pop();
+        int a = operands.top();
+        operands.pop();
+        char op = operators.top();
+        operators.pop();
+        operands.push(applyOperation(a, b, op));
     }
 
-    return values.top();
+    return operands.top();
 }
 
-int precedence(char op)
-{
-    if(op == '+'||op == '-')
-        return 1;
-    if(op == '*'||op == '/')
-        return 2;
-    return 0;
-}
-
-int applyOp(int a, int b, char op)
-{
-    switch(op)
-    {
-        case '+': return a + b;
-        case '-': return a - b;
-        case '*': return a * b;
-        case '/': return a / b;
+int main(int argc, char *argv[]) {
+    // Read equations from a file
+    ifstream file(argv[1]);
+    string line;
+    while (getline(file, line)) {
+        int result = evaluateExpression(line, 0, line.length() - 1);
+        cout << result << endl;
     }
+    file.close();
+
     return 0;
 }
