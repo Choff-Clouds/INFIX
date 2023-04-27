@@ -4,9 +4,15 @@
 
 using namespace std;
 
-int main(int argc, char* argv[i) {
-    ifstream inFile(argv[1]);
-    ofstream outFile(argv[1]);
+void removeEndline(string& line) {
+    if (!line.empty() && line[line.length() - 1] == '\r') {
+        line.erase(line.length() - 1);
+    }
+}
+
+int main(int argc, char *argv[i]) {
+    ifstream inFile(arg[1]);
+    ofstream outFile(arg[2]);
 
     if (!inFile) {
         cerr << "Unable to open input file";
@@ -21,6 +27,7 @@ int main(int argc, char* argv[i) {
     string line;
 
     while (getline(inFile, line)) {
+        removeEndline(line);
         line = line.substr(0, line.size() - 1); // remove the end period
         line = line.substr(line.find(" ") + 1); // remove the line number
         outFile << line << endl;
@@ -43,6 +50,7 @@ int main(int argc, char* argv[i) {
     }
 
     while (getline(inFile, line)) {
+        removeEndline(line);
         line = line.substr(0, line.size() - 1); // remove the end period
         line = line.substr(line.find(" ") + 1); // remove the line number
         outFile << line << endl;
@@ -53,4 +61,3 @@ int main(int argc, char* argv[i) {
 
     return 0;
 }
-
