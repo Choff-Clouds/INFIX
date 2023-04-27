@@ -10,7 +10,7 @@ void removeEndline(string& line) {
     }
 }
 
-int main(int argc, char *argv[i]) {
+int main(int argc, char *argv[]) {
     ifstream inFile(arg[1]);
     ofstream outFile("output.txt);
 
