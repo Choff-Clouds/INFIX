@@ -84,13 +84,13 @@ int evaluateExpression(const string& expression, int start, int end) {
 
 int main(int argc, char *argv[]) {
     // Read equations from a file
-    ifstream file(argv[1]);
+   //ifstream file(argv[1]);
     string line;
-    while (getline(file, line)) {
+    while (getline(cin, line)) {
         int result = evaluateExpression(line, 0, line.length() - 1);
         cout << result << endl;
     }
-    file.close();
+    //file.close();
 
     return 0;
 }
